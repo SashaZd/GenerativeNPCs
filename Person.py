@@ -111,10 +111,13 @@ class Person(object):
 
 		# print "Otherwise here.... ", self.town
 		# Check if age is old enough for sexual partners
-		if not self.flag_sexually_active and self.age > 18: 
+		if not self.flag_sexually_active and self.age > 18 and self.age <= 44: 
 			self.flag_sexually_active = True
 
-		if self.spouse and not self.pregnant and not self.spouse.pregnant: 
+		if self.flag_sexually_active and self.age > 45: 
+			self.flag_sexually_active = False
+
+		if self.spouse and not self.pregnant and self.flag_sexually_active: 
 			self.consider_having_baby()
 
 		# if self.pregnant and self.world.current_date >= self.conception_date: 
@@ -383,7 +386,7 @@ class Person(object):
 
 	def initiate_group_discussion(self, group):
 
-		if random.random() < 0.05:
+		if random.random() < 0.04:
 			count = Counter(list(itertools.chain.from_iterable([person.knowledge.facts.keys() for person in group])))
 
 			# What facts are the most common
@@ -411,14 +414,16 @@ class Person(object):
 			for talker in discussion.group: 
 				conversationalists = [person.name for person in group if( (person.id != talker['person'].id) and (person.name != talker['person'].name))]
 				if len(conversationalists) > 1: 
-					talkers = ''.join(conversationalists[:-1]), "and", conversationalists[-1]
+					other_talkers = conversationalists[0], ', '.join(conversationalists[1:-1]), " and ", conversationalists[-1]
 				else:
-					talkers = ''.join(conversationalists)
+					other_talkers = ''.join(conversationalists)
 
-				journal_message = "I met %s. We discussed %s for %s minutes."%(''.join(talkers), chosen_topic_of_discussion, discussion_duration)
-				person.journal.append(journal_message)
 				person = talker['person']
 				opinions = talker['opinion']
+
+				journal_message = "I met %s. We discussed %s for %s minutes."%(''.join(other_talkers), chosen_topic_of_discussion, discussion_duration)
+				person.journal.append(journal_message)
+				
 				changed_mind = person.knowledge.facts[chosen_topic_of_discussion].update_opinion_after_discussion(opinions)
 
 				if changed_mind: 

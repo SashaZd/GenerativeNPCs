@@ -67,6 +67,22 @@ class Organization(object):
 		pass
 
 
+	def all_members_simulate_interaction(self, type_interaction):
+		# Updates relationship
+
+		if len(self.current_members) > 1: 
+			for student in self.current_members:
+				student.simple_interaction(self.current_members, type_interaction)
+
+			# Currently a 50% chance that you'll have a discussion with the group you're interacting with
+			# If you choose not to have a discussion, the NPCs still update their simple relationships with each other 
+			# i.e. social interaction only or discussion also
+
+			# Randomly choose one student that begins a discussion: 
+			discussion_leader = random.choice(list(self.current_members))
+			discussion_leader.initiate_group_discussion(self.current_members)
+
+
 	def __str__(self):
 		return "%s"%(self.name)
 
@@ -110,23 +126,6 @@ class School(Organization):
 		self.remove_member(student)
 
 
-	def all_members_simulate_interaction(self):
-		# Updates relationship
-
-		if len(self.current_members) > 1: 
-			for student in self.current_members:
-				student.simple_interaction(self.current_members, 'classmate_school')
-
-			# Currently a 50% chance that you'll have a discussion with the group you're interacting with
-			# If you choose not to have a discussion, the NPCs still update their simple relationships with each other 
-			# i.e. social interaction only or discussion also
-
-			# Randomly choose one student that begins a discussion: 
-			discussion_leader = random.choice(list(self.current_members))
-			discussion_leader.initiate_group_discussion(self.current_members)
-
-
-
 	def teach_fact(self):
 		fact = self.knowledge.get_random_fact()
 		
@@ -146,15 +145,6 @@ class University(Organization):
 	def __init__(self,name):
 		super(University, self).__init__(name)
 		self.days_of_meet = [0,1,2,3,4,5]
-		pass
-
-
-class Company(Organization):
-
-	""" Company
-	"""
-	def __init__(self,name):
-		super(Company, self).__init__(name)
 		pass
 
 
@@ -179,6 +169,30 @@ class Hospital(Organization):
 		super(Hospital, self).__init__(name, 'hospital', location, founding_date)
 		pass
 
+
+class Company(Organization):
+
+	""" Company
+	"""
+	def __init__(self,name):
+		super(Company, self).__init__(name)
+		self.owner = None
+
+		# List of topic names that are required for a position here
+		self.knowledge_required = []
+		
+		self.positions = {}
+
+
+
+
+class Restaurant(Company):
+	"""docstring for Restaurant"""
+	def __init__(self, name):
+		super(Restaurant, self).__init__(name)
+		# self.name = name
+		pass
+		
 
 
 

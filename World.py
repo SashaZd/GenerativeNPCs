@@ -87,7 +87,7 @@ class World(object):		# the sim will run for 50 years by default
 	def go_to_school(self):
 		for school in self.organizations['school']:
 			school.teach_fact()
-			school.all_members_simulate_interaction()
+			school.all_members_simulate_interaction('classmate_school')
 			
 
 

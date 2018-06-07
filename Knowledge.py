@@ -159,7 +159,7 @@ class Fact(object):
 
 	
 	def update_opinion_after_discussion(self, new_opinion):
-		if (new_opinion['attitude'] != self.opinion.attitude) or (new_opinion['opinion'] != self.opinion.opinion) or (new_opinion['unc'] != self.opinion.unc): # or (new_opinion['pub_thr'] != self.opinion.pub_thr) or (new_opinion['pri_thr'] != self.opinion.pri_thr):
+		if (new_opinion['attitude'] != self.opinion.attitude) or (new_opinion['opinion'] != self.opinion.opinion): # or (new_opinion['unc'] != self.opinion.unc): # or (new_opinion['pub_thr'] != self.opinion.pub_thr) or (new_opinion['pri_thr'] != self.opinion.pri_thr):
 			self.historical_opinions.append(deepcopy(self.opinion))
 			self.opinion = Opinion(new_opinion['attitude'], new_opinion['opinion'], new_opinion['unc'], new_opinion['pub_thr'], new_opinion['pri_thr']) 
 			return True

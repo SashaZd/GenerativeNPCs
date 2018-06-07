@@ -26,8 +26,8 @@ LOCATIONS = [
 	'Raleigh', 
 	'Atlanta',
 	'Pittsburgh', 
-	'New York',
-	'San Francisco'
+	# 'New York',
+	# 'San Francisco'
 ]
 
 NUM_SCHOOLS_PER_LOCATION = 3
@@ -104,4 +104,21 @@ HOSPITAL_NAMES = [
 ]
 
 
+def find_all_changed_facts_for_person_index(world, index):
+	for fact in world.living_population[index].knowledge.facts.values():
+	    if fact.historical_opinions:
+	        print fact.name, ":", fact.opinion
+	        print "\t \tBefore: ", fact.historical_opinions
 
+
+def find_most_changed_fact(world):
+    current_max = 0
+    info = None
+    npc = None
+    for person in world.living_population: 
+        for fact in person.knowledge.facts.values(): 
+            if len(fact.historical_opinions) > current_max:
+                current_max = len(fact.historical_opinions)
+                info = fact
+                npc = person
+    return npc.census_index-1, info
